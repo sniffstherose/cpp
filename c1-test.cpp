@@ -1,8 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
-
-#include <chrono>
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
 class MyString {
 private:
@@ -70,6 +68,17 @@ public:
         return result;
     }
 
+    // 重载<<操作符，用于输出到流
+    friend std::ostream& operator<<(std::ostream& os, const MyString& str) {
+        os << str.data;
+        return os;
+    }
+
+    // 重载[]操作符，用于修改指定位置的字符
+    char& operator[](size_t index) {
+        return data[index];
+    }
+
     // 获取字符串长度
     size_t getLength() const {
         return length;
@@ -82,28 +91,28 @@ public:
 };
 
 int main() {
-    const int N = 1000000;
+    // 测试构造函数和输出运算符重载
+    MyString a("test");
+    std::cout << a << std::endl;  // 输出：test
 
-    // 不使用移动构造函数的情况下创建对象
-    auto start = std::chrono::steady_clock::now();
-    MyString str1("Hello");
-    for (int i = 0; i < N; ++i) {
-        MyString temp(str1);
-    }
-    auto end = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "不使用移动语义 " << duration.count() << " ms" << std::endl;
+    // 测试赋值运算符重载和连接运算符重载
+    MyString b(" Hello");
+    a += b;
+    std::cout << a << std::endl;  // 输出：test Hello
 
-    // 使用移动构造函数的情况下创建对象
-    start = std::chrono::steady_clock::now();
-    MyString str2("Hello");
-    for (int i = 0; i < N; ++i) {
-        MyString temp(std::move(str2));
-    }
-    end = std::chrono::steady_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "使用移动语义： " << duration.count() << " ms" << std::endl;
+    MyString c = a + b;
+    std::cout << c << std::endl;  // 输出：test Hello Hello
+
+    // 测试修改字符和索引运算符重载
+    a[2] = 'S';
+    std::cout << a << std::endl;  // 输出：teSt
+
+    // 测试移动构造函数和长度获取函数
+    MyString d = std::move(a);
+    std::cout << d << std::endl;  // 输出：teSt
+    std::cout << "Length of d: " << d.getLength() << std::endl;  // 输出：Length of d: 4
+
+    std::cout << "Length of a: " << a.getLength() << std::endl;  // 输出：Length of a: 0
 
     return 0;
 }
-
