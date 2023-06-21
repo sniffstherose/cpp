@@ -8,24 +8,24 @@ private:
     size_t length;
 
 public:
-    // Ä¬ÈÏ¹¹Ôìº¯Êı
+    // é»˜è®¤æ„é€ å‡½æ•°
     MyString() : data(nullptr), length(0) {}
 
-    // ´ø²Î¹¹Ôìº¯Êı
+    // å¸¦å‚æ„é€ å‡½æ•°
     MyString(const char* str) {
         length = std::strlen(str);
         data = new char[length + 1];
         std::strcpy(data, str);
     }
 
-    // ¿½±´¹¹Ôìº¯Êı
+    // æ‹·è´æ„é€ å‡½æ•°
     MyString(const MyString& other) {
         length = other.length;
         data = new char[length + 1];
         std::strcpy(data, other.data);
     }
 
-    // ÒÆ¶¯¹¹Ôìº¯Êı
+    // ç§»åŠ¨æ„é€ å‡½æ•°
     MyString(MyString&& other) noexcept {
         length = other.length;
         data = other.data;
@@ -33,12 +33,12 @@ public:
         other.data = nullptr;
     }
 
-    // Îö¹¹º¯Êı
+    // ææ„å‡½æ•°
     ~MyString() {
         delete[] data;
     }
 
-    // ÖØÔØ¸³Öµ²Ù×÷·û=
+    // é‡è½½èµ‹å€¼æ“ä½œç¬¦=
     MyString& operator=(const MyString& other) {
         if (this != &other) {
             delete[] data;
@@ -49,7 +49,7 @@ public:
         return *this;
     }
 
-    // ÖØÔØ+=²Ù×÷·û
+    // é‡è½½æ“ä½œç¬¦
     MyString& operator+=(const MyString& other) {
         size_t newLength = length + other.length;
         char* newData = new char[newLength + 1];
@@ -61,58 +61,58 @@ public:
         return *this;
     }
 
-    // ÖØÔØ+²Ù×÷·û
+    // é‡è½½+æ“ä½œç¬¦
     MyString operator+(const MyString& other) const {
         MyString result(*this);
         result += other;
         return result;
     }
 
-    // ÖØÔØ<<²Ù×÷·û£¬ÓÃÓÚÊä³öµ½Á÷
+    // é‡è½½<<æ“ä½œç¬¦ï¼Œç”¨äºè¾“å‡ºåˆ°æµ
     friend std::ostream& operator<<(std::ostream& os, const MyString& str) {
         os << str.data;
         return os;
     }
 
-    // ÖØÔØ[]²Ù×÷·û£¬ÓÃÓÚĞŞ¸ÄÖ¸¶¨Î»ÖÃµÄ×Ö·û
+    // é‡è½½[]æ“ä½œç¬¦ï¼Œç”¨äºä¿®æ”¹æŒ‡å®šä½ç½®çš„å­—ç¬¦
     char& operator[](size_t index) {
         return data[index];
     }
 
-    // »ñÈ¡×Ö·û´®³¤¶È
+    // è·å–å­—ç¬¦ä¸²é•¿åº¦
     size_t getLength() const {
         return length;
     }
 
-    // »ñÈ¡×Ö·û´®ÄÚÈİ
+    // è·å–å­—ç¬¦ä¸²å†…å®¹
     const char* getData() const {
         return data;
     }
 };
 
 int main() {
-    // ²âÊÔ¹¹Ôìº¯ÊıºÍÊä³öÔËËã·ûÖØÔØ
+    // æµ‹è¯•æ„é€ å‡½æ•°å’Œè¾“å‡ºè¿ç®—ç¬¦é‡è½½
     MyString a("test");
-    std::cout << a << std::endl;  // Êä³ö£ºtest
+    std::cout << a << std::endl;  // è¾“å‡ºï¼štest
 
-    // ²âÊÔ¸³ÖµÔËËã·ûÖØÔØºÍÁ¬½ÓÔËËã·ûÖØÔØ
+    // æµ‹è¯•èµ‹å€¼è¿ç®—ç¬¦é‡è½½å’Œè¿æ¥è¿ç®—ç¬¦é‡è½½
     MyString b(" Hello");
     a += b;
-    std::cout << a << std::endl;  // Êä³ö£ºtest Hello
+    std::cout << a << std::endl;  // è¾“å‡ºï¼štest Hello
 
     MyString c = a + b;
-    std::cout << c << std::endl;  // Êä³ö£ºtest Hello Hello
+    std::cout << c << std::endl;  // è¾“å‡ºï¼štest Hello Hello
 
-    // ²âÊÔĞŞ¸Ä×Ö·ûºÍË÷ÒıÔËËã·ûÖØÔØ
+    // æµ‹è¯•ä¿®æ”¹å­—ç¬¦å’Œç´¢å¼•è¿ç®—ç¬¦é‡è½½
     a[2] = 'S';
-    std::cout << a << std::endl;  // Êä³ö£ºteSt
+    std::cout << a << std::endl;  // è¾“å‡ºï¼šteSt
 
-    // ²âÊÔÒÆ¶¯¹¹Ôìº¯ÊıºÍ³¤¶È»ñÈ¡º¯Êı
+    // æµ‹è¯•ç§»åŠ¨æ„é€ å‡½æ•°å’Œé•¿åº¦è·å–å‡½æ•°
     MyString d = std::move(a);
-    std::cout << d << std::endl;  // Êä³ö£ºteSt
-    std::cout << "Length of d: " << d.getLength() << std::endl;  // Êä³ö£ºLength of d: 4
+    std::cout << d << std::endl;  // è¾“å‡ºï¼šteSt
+    std::cout << "Length of d: " << d.getLength() << std::endl;  // è¾“å‡ºï¼šLength of d: 4
 
-    std::cout << "Length of a: " << a.getLength() << std::endl;  // Êä³ö£ºLength of a: 0
+    std::cout << "Length of a: " << a.getLength() << std::endl;  // è¾“å‡ºï¼šLength of a: 0
 
     return 0;
 }
